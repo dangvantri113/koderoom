@@ -23,5 +23,5 @@ jobs:
 
     - name: 🚀 Deploy via SSH
       run: |
-        rsync -avz --exclude '.git*' --exclude '.github' ./ \
+        rsync -avz ./blog \
           ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_PATH }}
