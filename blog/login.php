@@ -12,7 +12,7 @@ if (isset($_SESSION['user_id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $success_message = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : null;
     $error_message = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : null;
-    include 'views/login_form.php';
+    include 'views/login.php';
     exit;
 }
 
