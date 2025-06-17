@@ -23,9 +23,5 @@ jobs:
 
     - name: 🚀 Deploy via SSH
       run: |
-        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd ${{ secrets.EC2_PATH }}
-          git pull origin main
-          # Optionally restart services
-          # sudo systemctl restart httpd
-        EOF
+        rsync -avz --exclude '.git*' --exclude '.github' ./ \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_PATH }}
