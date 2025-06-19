@@ -1,21 +1,8 @@
 <?php
 require_once 'includes/header.php';
-require_once 'includes/db.php';
-
-$stmt = $mysqli->prepare("SELECT id, title, body, created_at FROM posts ORDER BY created_at DESC LIMIT 5");
-$stmt->execute();
-$stmt->bind_result($id, $title, $content, $created_at);
-$posts = [];
-while ($stmt->fetch()) {
-  $posts[] = [
-    'id' => $id,
-    'title' => $title,
-    'content' => $content,
-    'created_at' => $created_at
-  ];
-}
-$stmt->close();
-$mysqli->close();
+require_once 'includes/Database.php';
+require_once 'includes/Models/Post.php';
+$posts = Post::all();
 ?>
 
 <main>
@@ -28,10 +15,10 @@ $mysqli->close();
 <?php endif; ?>
 <?php foreach ($posts as $post): ?>
         <article>
-            <h3><?= htmlspecialchars($post['title']) ?></h3>
-            <p><?= nl2br(htmlspecialchars($post['content'])) ?></p>
-            <p><small>Published on <?= htmlspecialchars($post['created_at']) ?></small></p>
-            <a href="post.php?id=<?= $post['id'] ?>">Read more</a>
+            <h3><?= htmlspecialchars($post->title) ?></h3>
+            <p><?= nl2br(htmlspecialchars($post->body)) ?></p>
+            <p><small>Published on <?= htmlspecialchars($post->created_at) ?></small></p>
+            <a href="post.php?id=<?= $post->id ?>">Read more</a>
         </article>
     <?php endforeach; ?>
 </main>

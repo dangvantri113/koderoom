@@ -1,13 +1,16 @@
 <?php
 
-session_start();
-// Check if the user is already logged in
-if (isset($_SESSION['user_id'])) {
-    header('Location: index.php'); // Redirect to the homepage if already logged in
+require_once 'includes/Auth.php';
+require_once 'includes/Session.php';
+require_once 'includes/Models/User.php';
+
+
+$session = new Session();
+$session->start();
+if ($session->exists('logged_in')) {
+    header('Location: index.php');
     exit;
 }
-
-require_once 'includes/db.php'; // Include database connection
 
 // if GET show the registration form
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -59,25 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = htmlspecialchars($name);
     $email = htmlspecialchars($email);
     $password = htmlspecialchars($password);
-    // Here you would typically hash the password and save the user to a database
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-    // Here you would typically save the user to a database
-    $stmt = $mysqli->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-    if (!$stmt) {
+    try {
+        $user = new User($name, $email, $passwordHash);
+        $user->save();
+    } catch (Exception $e) {
         // redirect back to the registration form with an error message
-        header('Location: register.php?error=Database error: ' . $mysqli->error);
+        header('Location: register.php?error=Registration failed: ' . htmlspecialchars($e->getMessage()));
         exit;
     }
-    $stmt->bind_param("sss", $name, $email, $passwordHash);
-    if (!$stmt->execute()) {
-        // redirect back to the registration form with an error message
-        header('Location: register.php?error=Database error: ' . $stmt->error);
-        exit;
-    }
-    $stmt->close();
-    // Close the database connection
-    $mysqli->close();
-    // Redirect to the login page with a success message
     header('Location: login.php?success=Registration successful! Please log in.');
     exit;
 }

@@ -1,21 +1,20 @@
 <?php
-// add header for the blog
-session_start();
-require_once 'db.php'; // Include database connection
+require_once __DIR__ . '/Database.php';
+require_once __DIR__ . '/Session.php';
+require_once __DIR__ . '/Models/User.php';
+
+$session = new Session();
+$session->start();
+$mysqli = Database::getInstance()->getConnection();
 // Check if the user is logged in
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
+if ($session->exists('user_id')) {
+    $user_id = $session->get('user_id');
     // Fetch user data from the database
-    $stmt = $mysqli->prepare("SELECT name, email FROM users WHERE id = ?");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($name, $email);
-    $stmt->fetch();
-    $stmt->close();
+    $user = User::findById($user_id);
     // Display the header with user information
     echo "<header>";
-    echo "<h1>Welcome to the Blog, $name</h1>";
-    echo "<p>Email: $email</p>";
+    echo "<h1>Welcome to the Blog, $user->name </h1>";
+    echo "<p>Email: $user->email</p>";
     echo "<nav>";
     echo "<ul>";
     echo "<li><a href='index.php'>Home</a></li>";

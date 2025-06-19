@@ -1,9 +1,12 @@
 <?php
-session_start();
-require_once 'includes/db.php';
+require_once 'includes/Database.php';
+require_once 'includes/Session.php';
+
+$session = new Session();
+$session->start();
 
 // Redirect if already logged in
-if (isset($_SESSION['user_id'])) {
+if ($session->exists('user_id')) {
     header('Location: index.php');
     exit;
 }
@@ -35,6 +38,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 $email = htmlspecialchars($email);
 
 // Query user
+$mysqli = Database::getInstance()->getConnection();
 $stmt = $mysqli->prepare("SELECT id, password FROM users WHERE email = ?");
 if (!$stmt) {
     header('Location: login.php?error=Database error');
