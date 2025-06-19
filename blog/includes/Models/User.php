@@ -7,16 +7,18 @@ class User {
   public $password;
   public $created_at;
 
-  public function __construct($name, $email, $password) {
+  public function __construct($id, $name, $email, $password, $created_at = null) {
+    $this->id = $id;
     $this->name = $name;
     $this->email = $email;
     $this->password = password_hash($password, PASSWORD_DEFAULT);
+    $this->created_at = $created_at ? $created_at : date('Y-m-d H:i:s');
   }
 
   public function save() {
     $db = Database::getInstance()->getConnection();
     $stmt = $db->prepare("INSERT INTO users (name, email, password, created_at) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $this->name, $this->email, $this->password, date('Y-m-d H:i:s'));
+    $stmt->bind_param("ssss", $this->name, $this->email, $this->password, $this->created_at);
     return $stmt->execute();
   }
 

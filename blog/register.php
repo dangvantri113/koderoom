@@ -4,7 +4,6 @@ require_once 'includes/Auth.php';
 require_once 'includes/Session.php';
 require_once 'includes/Models/User.php';
 
-
 $session = new Session();
 $session->start();
 if ($session->exists('logged_in')) {
@@ -64,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = htmlspecialchars($password);
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     try {
-        $user = new User($name, $email, $passwordHash);
+        $user = new User(null, $name, $email, $passwordHash);
         $user->save();
     } catch (Exception $e) {
         // redirect back to the registration form with an error message
