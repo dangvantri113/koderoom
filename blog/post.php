@@ -1,5 +1,5 @@
 <?php 
-require_once 'includes/header.php';
+require_once 'views/header.php';
 require_once 'includes/Models/Post.php';
 // Check if the post ID is provided
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
