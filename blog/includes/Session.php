@@ -33,4 +33,11 @@ class Session
   {
     session_destroy();
   }
+
+  public static function writeClose()
+  {
+    if (session_status() === PHP_SESSION_ACTIVE) {
+      session_write_close();
+    }
+  }
 }

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
   <?php if (!empty($error_message)): ?>
     <p style="color: red;"><?= $error_message ?></p>
   <?php endif; ?>
-  <form method="POST" action="login.php" class="form form--login">
+  <form method="POST" action="/login" class="form form--login">
     <h2 class="form__title">Login</h2>
     <div class="form__group">
       <label for="email" class="form__label">Email:</label>
