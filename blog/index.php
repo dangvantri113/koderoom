@@ -27,6 +27,12 @@ if ($uri === '/logout') {
     exit;
 }
 
+if ($uri === '/post/create') {
+    require_once 'controllers/PostController.php';
+    PostController::create();
+    exit;
+}
+
 if (preg_match('#^/post/(\d+)$#', $uri, $matches)) {
     require_once 'controllers/PostController.php';
     PostController::show($matches[1]);
